@@ -1,0 +1,4 @@
+rootProject.name = 'E-Commerce-Platform'
+include 'admin'
+include 'service'
+
