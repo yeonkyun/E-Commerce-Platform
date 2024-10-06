@@ -57,8 +57,8 @@ public class SQL {
     public static final String SELECT_ORDER = "SELECT * FROM orders";
     public static final String SELECT_ORDER_BY_ID = "SELECT * FROM orders WHERE order_id = ?";
     public static final String SELECT_ORDER_BY_CUSTOMER_ID = "SELECT * FROM orders WHERE customer_id = ?";
-    public static final String UPDATE_ORDER = "UPDATE orders SET name = ?, phone = ?, address1 = ?, address2 = ?, zip_code = ?, total_price = ?, status = ? WHERE order_id = ?";
-    public static final String DELETE_ORDER = "DELETE FROM orders WHERE order_id = ?";
+    public static final String UPDATE_ORDER = "UPDATE orders SET name = ?, phone = ?, address1 = ?, address2 = ?, zip_code = ?, status = ? WHERE order_id = ?";
+    public static final String DELETE_ORDER = "UPDATE orders SET status = '삭제' WHERE order_id = ?";
 
     // order_detail
     public static final String INSERT_ORDER_DETAIL = "INSERT INTO order_detail (order_id, product_id, product_price, total_discount_price, quantity) VALUES (?, ?, ?, ?, ?)";
@@ -69,20 +69,22 @@ public class SQL {
     public static final String DELETE_ORDER_DETAIL = "DELETE FROM order_detail WHERE order_detail_id = ?";
 
     // payment
-    public static final String INSERT_PAYMENT = "INSERT INTO payment (order_id, payment_method, price, status, created_at) VALUES (?, ?, ?, ?, NOW())";
+    public static final String INSERT_PAYMENT = "INSERT INTO payment (order_id, payment_method, price, status, created_at) SELECT ?, ?, orders.total_price, ?, NOW() FROM orders WHERE orders.order_id = ?";
     public static final String SELECT_PAYMENT = "SELECT * FROM payment";
     public static final String SELECT_PAYMENT_BY_ID = "SELECT * FROM payment WHERE payment_id = ?";
-    public static final String UPDATE_PAYMENT = "UPDATE payment SET payment_method = ?, price = ?, status = ? WHERE payment_id = ?";
+    public static final String SELECT_PAYMENT_BY_ORDER_ID = "SELECT * FROM payment WHERE order_id = ?";
+    public static final String SELECT_PAYMENT_BY_PAYMENT_METHOD = "SELECT * FROM payment WHERE payment_method = ?";
+    public static final String UPDATE_PAYMENT = "UPDATE payment SET status = ? WHERE payment_id = ?";
     public static final String DELETE_PAYMENT = "DELETE FROM payment WHERE payment_id = ?";
 
     // product
     public static final String INSERT_PRODUCT = "INSERT INTO product (category_id, name, description, price, stock_quantity, is_selling, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, NOW(), NOW())";
     public static final String SELECT_PRODUCT = "SELECT * FROM product";
     public static final String SELECT_PRODUCT_BY_ID = "SELECT * FROM product WHERE product_id = ?";
-    public static final String SELECT_PRODUCT_BY_NAME = "SELECT * FROM product WHERE name = ?";
+    public static final String SELECT_PRODUCT_BY_NAME = "SELECT * FROM product WHERE name LIKE CONCAT('%', ?, '%')";
     public static final String SELECT_PRODUCT_BY_CATEGORY_ID = "SELECT * FROM product WHERE category_id = ?";
     public static final String UPDATE_PRODUCT = "UPDATE product SET category_id = ?, name = ?, description = ?, price = ?, stock_quantity = ?, is_selling = ?, updated_at = NOW() WHERE product_id = ?";
-    public static final String DELETE_PRODUCT = "DELETE FROM product WHERE product_id = ?";
+    public static final String DELETE_PRODUCT = "UPDATE product SET is_selling = false, updated_at = NOW() WHERE product_id = ?";
 
     // review
     public static final String INSERT_REVIEW = "INSERT INTO review (product_id, customer_id, rating, content, created_at) VALUES (?, ?, ?, ?, NOW())";
@@ -94,11 +96,11 @@ public class SQL {
     public static final String DELETE_REVIEW = "DELETE FROM review WHERE review_id = ?";
 
     // used_coupon
-    public static final String INSERT_USED_COUPON = "INSERT INTO used_coupon (order_detail_id, coupon_id, coupon_discount_price, created_at) VALUES (?, ?, ?, NOW())";
-    public static final String SELECT_USED_COUPON = "SELECT * FROM used_coupon";
-    public static final String SELECT_USED_COUPON_BY_ID = "SELECT * FROM used_coupon WHERE used_coupon_id = ?";
-    public static final String SELECT_USED_COUPON_BY_ORDER_DETAIL_ID = "SELECT * FROM used_coupon WHERE order_detail_id = ?";
-    public static final String SELECT_USED_COUPON_BY_COUPON_ID = "SELECT * FROM used_coupon WHERE coupon_id = ?";
-    public static final String UPDATE_USED_COUPON = "UPDATE used_coupon SET coupon_id = ?, coupon_discount_price = ? WHERE used_coupon_id = ?";
-    public static final String DELETE_USED_COUPON = "DELETE FROM used_coupon WHERE used_coupon_id = ?";
+    public static final String INSERT_USED_COUPON = "INSERT INTO used_coupons (order_detail_id, coupon_id, coupon_discount_price, created_at) VALUES (?, ?, ?, NOW())";
+    public static final String SELECT_USED_COUPON = "SELECT * FROM used_coupons";
+    public static final String SELECT_USED_COUPON_BY_ID = "SELECT * FROM used_coupons WHERE used_coupon_id = ?";
+    public static final String SELECT_USED_COUPON_BY_ORDER_DETAIL_ID = "SELECT * FROM used_coupons WHERE order_detail_id = ?";
+    public static final String SELECT_USED_COUPON_BY_COUPON_ID = "SELECT * FROM used_coupons WHERE coupon_id = ?";
+    public static final String UPDATE_USED_COUPON = "UPDATE used_coupons SET coupon_id = ?, coupon_discount_price = ? WHERE used_coupon_id = ?";
+    public static final String DELETE_USED_COUPON = "DELETE FROM used_coupons WHERE used_coupon_id = ?";
 }

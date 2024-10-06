@@ -21,12 +21,14 @@ public class ProductService implements Mservice<Integer, Product> {
     public Product add(Product product) throws Exception {
         Connection connection = pool.getConnection();
         try {
+            connection.setAutoCommit(false); // Disable auto-commit mode
             dao.insert(product, connection);
             connection.commit();
         } catch (Exception e) {
             connection.rollback();
             throw e;
         } finally {
+            connection.setAutoCommit(true); // Restore auto-commit mode
             pool.releaseConnection(connection);
         }
         return product;
@@ -36,6 +38,7 @@ public class ProductService implements Mservice<Integer, Product> {
     public Product modify(Product product) throws Exception {
         Connection connection = pool.getConnection();
         try {
+            connection.setAutoCommit(false); // Disable auto-commit mode
             dao.update(product, connection);
             connection.commit();
         } catch (Exception e) {
@@ -51,12 +54,14 @@ public class ProductService implements Mservice<Integer, Product> {
     public Boolean remove(Integer integer) throws Exception {
         Connection connection = pool.getConnection();
         try {
+            connection.setAutoCommit(false); // Disable auto-commit mode
             dao.delete(integer, connection);
             connection.commit();
         } catch (Exception e) {
             connection.rollback();
             throw e;
         } finally {
+            connection.setAutoCommit(true); // Restore auto-commit mode
             pool.releaseConnection(connection);
         }
         return true;
@@ -67,12 +72,14 @@ public class ProductService implements Mservice<Integer, Product> {
         Connection connection = pool.getConnection();
         Product product;
         try {
+            connection.setAutoCommit(false); // Disable auto-commit mode
             product = dao.select(integer, connection);
             connection.commit();
         } catch (Exception e) {
             connection.rollback();
             throw e;
         } finally {
+            connection.setAutoCommit(true); // Restore auto-commit mode
             pool.releaseConnection(connection);
         }
         return product;
@@ -83,12 +90,14 @@ public class ProductService implements Mservice<Integer, Product> {
         Connection connection = pool.getConnection();
         List<Product> products;
         try {
+            connection.setAutoCommit(false); // Disable auto-commit mode
             products = dao.select(connection);
             connection.commit();
         } catch (Exception e) {
             connection.rollback();
             throw e;
         } finally {
+            connection.setAutoCommit(true); // Restore auto-commit mode
             pool.releaseConnection(connection);
         }
         return products;
@@ -98,12 +107,14 @@ public class ProductService implements Mservice<Integer, Product> {
         Connection connection = pool.getConnection();
         List<Product> products;
         try {
+            connection.setAutoCommit(false); // Disable auto-commit mode
             products = dao.selectByName(name, connection);
             connection.commit();
         } catch (Exception e) {
             connection.rollback();
             throw e;
         } finally {
+            connection.setAutoCommit(true); // Restore auto-commit mode
             pool.releaseConnection(connection);
         }
         return products;
@@ -113,12 +124,14 @@ public class ProductService implements Mservice<Integer, Product> {
         Connection connection = pool.getConnection();
         List<Product> products;
         try {
+            connection.setAutoCommit(false); // Disable auto-commit mode
             products = dao.selectByCategory(category, connection);
             connection.commit();
         } catch (Exception e) {
             connection.rollback();
             throw e;
         } finally {
+            connection.setAutoCommit(true); // Restore auto-commit mode
             pool.releaseConnection(connection);
         }
         return products;

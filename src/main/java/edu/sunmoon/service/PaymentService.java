@@ -21,12 +21,14 @@ public class PaymentService implements Mservice<Integer, Payment> {
     public Payment add(Payment payment) throws Exception {
         Connection connection = pool.getConnection();
         try {
+            connection.setAutoCommit(false);
             dao.insert(payment, connection);
             connection.commit();
         } catch (Exception e) {
             connection.rollback();
             throw e;
         } finally {
+            connection.setAutoCommit(true);
             pool.releaseConnection(connection);
         }
         return payment;
@@ -36,12 +38,14 @@ public class PaymentService implements Mservice<Integer, Payment> {
     public Payment modify(Payment payment) throws Exception {
         Connection connection = pool.getConnection();
         try {
+            connection.setAutoCommit(false);
             dao.update(payment, connection);
             connection.commit();
         } catch (Exception e) {
             connection.rollback();
             throw e;
         } finally {
+            connection.setAutoCommit(true);
             pool.releaseConnection(connection);
         }
         return payment;
@@ -51,12 +55,14 @@ public class PaymentService implements Mservice<Integer, Payment> {
     public Boolean remove(Integer integer) throws Exception {
         Connection connection = pool.getConnection();
         try {
+            connection.setAutoCommit(false);
             dao.delete(integer, connection);
             connection.commit();
         } catch (Exception e) {
             connection.rollback();
             throw e;
         } finally {
+            connection.setAutoCommit(true);
             pool.releaseConnection(connection);
         }
         return true;
@@ -67,12 +73,14 @@ public class PaymentService implements Mservice<Integer, Payment> {
         Connection connection = pool.getConnection();
         Payment payment;
         try {
+            connection.setAutoCommit(false);
             payment = dao.select(integer, connection);
             connection.commit();
         } catch (Exception e) {
             connection.rollback();
             throw e;
         } finally {
+            connection.setAutoCommit(true);
             pool.releaseConnection(connection);
         }
         return payment;
@@ -83,12 +91,48 @@ public class PaymentService implements Mservice<Integer, Payment> {
         Connection connection = pool.getConnection();
         List<Payment> payments;
         try {
+            connection.setAutoCommit(false);
             payments = dao.select(connection);
             connection.commit();
         } catch (Exception e) {
             connection.rollback();
             throw e;
         } finally {
+            connection.setAutoCommit(true);
+            pool.releaseConnection(connection);
+        }
+        return payments;
+    }
+
+    public List<Payment> getByOrderId(Integer orderId) throws Exception {
+        Connection connection = pool.getConnection();
+        List<Payment> payments;
+        try {
+            connection.setAutoCommit(false);
+            payments = dao.selectByOrderId(orderId, connection);
+            connection.commit();
+        } catch (Exception e) {
+            connection.rollback();
+            throw e;
+        } finally {
+            connection.setAutoCommit(true);
+            pool.releaseConnection(connection);
+        }
+        return payments;
+    }
+
+    public List<Payment> getByPaymentMethod(String paymentMethod) throws Exception {
+        Connection connection = pool.getConnection();
+        List<Payment> payments;
+        try {
+            connection.setAutoCommit(false);
+            payments = dao.selectByPaymentMethod(paymentMethod, connection);
+            connection.commit();
+        } catch (Exception e) {
+            connection.rollback();
+            throw e;
+        } finally {
+            connection.setAutoCommit(true);
             pool.releaseConnection(connection);
         }
         return payments;

@@ -21,12 +21,14 @@ public class UsedCouponService implements Mservice<Integer, UsedCoupon> {
     public UsedCoupon add(UsedCoupon usedCoupon) throws Exception {
         Connection connection = pool.getConnection();
         try {
+            connection.setAutoCommit(false);
             dao.insert(usedCoupon, connection);
             connection.commit();
         } catch (Exception e) {
             connection.rollback();
             throw e;
         } finally {
+            connection.setAutoCommit(true);
             pool.releaseConnection(connection);
         }
         return usedCoupon;
@@ -36,12 +38,14 @@ public class UsedCouponService implements Mservice<Integer, UsedCoupon> {
     public UsedCoupon modify(UsedCoupon usedCoupon) throws Exception {
         Connection connection = pool.getConnection();
         try {
+            connection.setAutoCommit(false);
             dao.update(usedCoupon, connection);
             connection.commit();
         } catch (Exception e) {
             connection.rollback();
             throw e;
         } finally {
+            connection.setAutoCommit(true);
             pool.releaseConnection(connection);
         }
         return usedCoupon;
@@ -51,12 +55,14 @@ public class UsedCouponService implements Mservice<Integer, UsedCoupon> {
     public Boolean remove(Integer integer) throws Exception {
         Connection connection = pool.getConnection();
         try {
+            connection.setAutoCommit(false);
             dao.delete(integer, connection);
             connection.commit();
         } catch (Exception e) {
             connection.rollback();
             throw e;
         } finally {
+            connection.setAutoCommit(true);
             pool.releaseConnection(connection);
         }
         return true;
@@ -66,8 +72,10 @@ public class UsedCouponService implements Mservice<Integer, UsedCoupon> {
     public UsedCoupon get(Integer integer) throws Exception {
         Connection connection = pool.getConnection();
         try {
+            connection.setAutoCommit(false);
             return dao.select(integer, connection);
         } finally {
+            connection.setAutoCommit(true);
             pool.releaseConnection(connection);
         }
     }
@@ -76,6 +84,7 @@ public class UsedCouponService implements Mservice<Integer, UsedCoupon> {
     public List<UsedCoupon> get() throws Exception {
         Connection connection = pool.getConnection();
         try {
+            connection.setAutoCommit(false);
             return dao.select(connection);
         } finally {
             pool.releaseConnection(connection);
@@ -85,8 +94,10 @@ public class UsedCouponService implements Mservice<Integer, UsedCoupon> {
     public List<UsedCoupon> getByOrderDetailId(Integer orderDetailId) throws Exception {
         Connection connection = pool.getConnection();
         try {
+            connection.setAutoCommit(false);
             return dao.selectByOrderDetailId(orderDetailId, connection);
         } finally {
+            connection.setAutoCommit(true);
             pool.releaseConnection(connection);
         }
     }
@@ -94,8 +105,10 @@ public class UsedCouponService implements Mservice<Integer, UsedCoupon> {
     public List<UsedCoupon> getByCouponId(Integer couponId) throws Exception {
         Connection connection = pool.getConnection();
         try {
+            connection.setAutoCommit(false);
             return dao.selectByCouponId(couponId, connection);
         } finally {
+            connection.setAutoCommit(true);
             pool.releaseConnection(connection);
         }
     }
